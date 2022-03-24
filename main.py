@@ -1,11 +1,8 @@
-import jupyter
 import numpy as np
 import pandas
-import numpy
-import pylab
 import matplotlib.pyplot as plt
 import matplotlib
-import sys
+
 
 def EMA(N,samples, sample_id):
     alpha = 2 / (N + 1)
