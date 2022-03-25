@@ -112,6 +112,8 @@ if __name__ == '__main__':
     K_val = stochastic_oscillator(samples,n)
     print(MACD_val)
     print(SIGNAL_val)
+    print(K_val)
+    #TODO analise with Stochastic Oscillator to get better results
     simulation(n,MACD_val,SIGNAL_val,samples,1000,40)
     make_plot(MACD_val,'MACD AND SIGNAL', True, 'MACD', 'SIGNAL',SIGNAL_val)
     #plt.set_figwidth(300)
