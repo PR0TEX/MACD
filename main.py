@@ -3,7 +3,6 @@ import pandas
 import matplotlib.pyplot as plt
 import matplotlib
 
-
 def EMA(N,samples, sample_id):
     alpha = 2 / (N + 1)
     base = 1 - alpha
@@ -37,8 +36,8 @@ def generate_SIGNAL(n, MACD_val):
     for i in range(n):
         SIGNAL_val.append(SIGNAL(MACD_val, i))
     return SIGNAL_val
-def read_file():
-    file = pandas.read_csv('wig20_d.csv',index_col=0)
+def read_file(file_name):
+    file = pandas.read_csv(file_name,index_col=0)
     values = []
     for i,j in  file.iterrows():
         #print(file.at[i,'Zamkniecie'])
@@ -47,20 +46,30 @@ def read_file():
     #     print("Something went wrong, unable to open file")
     #     return -1
     return values
-def make_plot(MACD_val,SIGNAL_val):
-    matplotlib.use('TkAgg')
+#flag determines if it needs 2 diagrams at plot on not
+def make_plot(MACD_val, title, isTwoDiagrams, label1, label2='',SIGNAL_val=None):
+    matplotlib.use('Tkagg')
     range = np.linspace(0,1000,1000) #check if it is nessesary and how it worksq
-    line1, = plt.plot(range,MACD_val, label='MACD')
-    line2, = plt.plot(range,SIGNAL_val, label='SIGNAL')
-    plt.title('MACD and SIGNAL')
-    plt.legend(handles=[line1, line2])
-    plt.show()
+    line1, = plt.plot(range,MACD_val, label=label1)
+    if(isTwoDiagrams):
+        line2, = plt.plot(range,SIGNAL_val, label=label2)
+        plt.legend(handles=[line1, line2])
+    else:
+        plt.legend(handles=[line1])
+    plt.title(title)
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     n = 1000
-    samples = read_file()
-    #print(samples)
+    samples = read_file('wig20_d.csv')
+    make_plot(samples,'Wig20',False,'wig20')
+    y = plt.figure(figsize=(2,2))
     MACD_val = generate_MACD(n,samples)
     SIGNAL_val = generate_SIGNAL(n,MACD_val)
-    make_plot(MACD_val,SIGNAL_val)
+    print(MACD_val)
+    print(SIGNAL_val)
+    #TODO add buy/sell when it correspond with MACD principles
+    make_plot(MACD_val,'MACD AND SIGNAL', True, 'MACD', 'SIGNAL',SIGNAL_val)
+    #plt.set_figwidth(300)
+    plt.show()
