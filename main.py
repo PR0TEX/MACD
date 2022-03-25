@@ -2,6 +2,7 @@ import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 import matplotlib
+x = 2
 
 def EMA(N,samples, sample_id):
     alpha = 2 / (N + 1)
@@ -73,19 +74,26 @@ def simulation(N,MACD_val, SIGNAL_val,samples,value,delay):
     if(value == 0):
         value = assets * samples[max_size]
     print(value)
+def L14(samples,period,start): #finds the lowest price traded of the 14 previous trading sessions
+    min = samples[start]
+    for i in range(start,period):
+        if samples[i] < min:
+            min = samples[i]
+    return min
+
+def stochastic_oscillator(samples):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     n = 1000
     samples = read_file('wig20_d.csv')
     make_plot(samples,'Wig20',False,'wig20')
-    plt.figure(figsize=(12, 5))
-    plt.grid()
+    plt.figure()
     MACD_val = generate_MACD(n,samples)
     SIGNAL_val = generate_SIGNAL(n,MACD_val)
     print(MACD_val)
     print(SIGNAL_val)
-    simulation(n,MACD_val,SIGNAL_val,samples,1000,2)
+    simulation(n,MACD_val,SIGNAL_val,samples,1000,40)
     make_plot(MACD_val,'MACD AND SIGNAL', True, 'MACD', 'SIGNAL',SIGNAL_val)
     #plt.set_figwidth(300)
     plt.show()
