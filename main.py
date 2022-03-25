@@ -57,19 +57,35 @@ def make_plot(MACD_val, title, isTwoDiagrams, label1, label2='',SIGNAL_val=None)
     else:
         plt.legend(handles=[line1])
     plt.title(title)
-
+def simulation(N,MACD_val, SIGNAL_val,samples,value,delay):
+    max_size = value-1
+    delay_cond = (delay if delay == 0 else delay - 1) # condition to avoid -1 in case dealy equals 0
+    assets = value / samples[0]
+    value = 0
+    for i in range(N):
+        if i >= delay:
+            if MACD_val[i-delay] > SIGNAL_val[i-delay] and MACD_val[i- delay_cond] < SIGNAL_val[i-delay_cond] and assets != 0:
+                value = assets * samples[i]
+                assets = 0
+            elif MACD_val[i-2] < SIGNAL_val[i-delay] and MACD_val[i-delay_cond] > SIGNAL_val[i-delay_cond] and value != 0:
+                assets = value / samples[i]
+                value = 0
+    if(value == 0):
+        value = assets * samples[max_size]
+    print(value)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     n = 1000
     samples = read_file('wig20_d.csv')
     make_plot(samples,'Wig20',False,'wig20')
-    y = plt.figure(figsize=(2,2))
+    plt.figure(figsize=(12, 5))
+    plt.grid()
     MACD_val = generate_MACD(n,samples)
     SIGNAL_val = generate_SIGNAL(n,MACD_val)
     print(MACD_val)
     print(SIGNAL_val)
-    #TODO add buy/sell when it correspond with MACD principles
+    simulation(n,MACD_val,SIGNAL_val,samples,1000,2)
     make_plot(MACD_val,'MACD AND SIGNAL', True, 'MACD', 'SIGNAL',SIGNAL_val)
     #plt.set_figwidth(300)
     plt.show()
