@@ -74,22 +74,32 @@ def simulation(N,MACD_val, SIGNAL_val,samples,value,delay):
     if(value == 0):
         value = assets * samples[max_size]
     print(value)
-def L14(samples,period,start): #finds the lowest price traded of the 14 previous trading sessions
+def L14(samples,start,period=14): #finds the lowest price traded of the 14 previous trading sessions
     min = samples[start]
-    for i in range(start,period):
+    for i in range(start-period,start):
         if samples[i] < min:
             min = samples[i]
     return min
 
-def H14(samples,period,start): #finds the highest price traded of the 14 previous trading sessions
+def H14(samples,start,period=14): #finds the highest price traded of the 14 previous trading sessions
     max = samples[start]
-    for i in range(start,period):
-        if samples[i] > min:
+    for i in range(start-period,start):
+        if samples[i] > max:
             max = samples[i]
     return max
 
-# def stochastic_oscillator(samples,n):
-
+def stochastic_oscillator(samples,n):
+    K=0
+    period = 14
+    K_values = []
+    for i in range(period,n):
+        K_top = samples[i] - L14(samples,i)
+        K += K_top
+        K_bottom = H14(samples,i) - L14(samples,i)
+        K /= K_bottom
+        K *= 100
+        K_values.append(K)
+    return K_values
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -99,9 +109,11 @@ if __name__ == '__main__':
     plt.figure()
     MACD_val = generate_MACD(n,samples)
     SIGNAL_val = generate_SIGNAL(n,MACD_val)
+    K_val = stochastic_oscillator(samples,n)
     print(MACD_val)
     print(SIGNAL_val)
     simulation(n,MACD_val,SIGNAL_val,samples,1000,40)
     make_plot(MACD_val,'MACD AND SIGNAL', True, 'MACD', 'SIGNAL',SIGNAL_val)
     #plt.set_figwidth(300)
+
     plt.show()
