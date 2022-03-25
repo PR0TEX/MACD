@@ -81,7 +81,15 @@ def L14(samples,period,start): #finds the lowest price traded of the 14 previous
             min = samples[i]
     return min
 
-def stochastic_oscillator(samples):
+def H14(samples,period,start): #finds the highest price traded of the 14 previous trading sessions
+    max = samples[start]
+    for i in range(start,period):
+        if samples[i] > min:
+            max = samples[i]
+    return max
+
+# def stochastic_oscillator(samples,n):
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
