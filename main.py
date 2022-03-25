@@ -117,5 +117,6 @@ if __name__ == '__main__':
     simulation(n,MACD_val,SIGNAL_val,samples,1000,40)
     make_plot(MACD_val,'MACD AND SIGNAL', True, 'MACD', 'SIGNAL',SIGNAL_val)
     #plt.set_figwidth(300)
-
+    #TODO add classes
+    #TODO prepare security for no opened file
     plt.show()
