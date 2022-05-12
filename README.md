@@ -1,5 +1,3 @@
-#TIps to run
-
-#Libraries
+Libraries: 
 - jupyter
 - pandas
